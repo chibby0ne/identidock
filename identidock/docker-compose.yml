@@ -1,0 +1,24 @@
+# Declares the name of the container to build. Multiple containers (often called services in Compose lingo) can be defined in a single YAML file.
+identidoc:
+    # Tells Compose that the image for this container is to be build from a Dockerifle that exists in the current directory.
+    build: .
+    # Ports key is directly analogous to the -p argument to docker run for exposing ports
+    ports: 
+        - "5000:5000"
+    # Environment key is directly analogous to the -e argument to docker run, which sets environment variables in the container.
+    environment:
+        ENV: DEV
+    # Volume key is directly analogous to the -v argument to docker run for the stting volumes.
+    volumes:
+        - ./app:/app
+    # declares al link from the identidock container to the dnmonster container. Compose will take care of starting containers in the correct order
+    links:
+        - dnmonster
+        - redis    # set up a link to the redis container
+
+# Defines a new dnmonster container. All we need to tell compose is to use the image amouat/dnmonster:1.0 from docker hub
+dnmonster:
+    image: amouat/dnmonster:1.0
+
+redis:
+    image: redis:3.0   # creates a redis container based on the official image
